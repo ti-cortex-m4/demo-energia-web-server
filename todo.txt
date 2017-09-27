@@ -1,0 +1,5 @@
+1. single variable
+2. POST instead GET
+3. save parameters in EEPROM
+4. extend IPAddress, parse from string
+5. serial console
