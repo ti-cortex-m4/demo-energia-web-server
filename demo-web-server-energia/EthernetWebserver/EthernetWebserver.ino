@@ -87,11 +87,11 @@ void loop() {
           printIndex();
         }
         // Check to see if the client request was "GET /H" or "GET /L":
-        if (currentLine.endsWith("GET /LED1_H")) {
+        if (currentLine.endsWith("POST /set1")) {
           variable = 1;
           printConfig();
         }         
-        if (currentLine.endsWith("GET /LED1_L")) {
+        if (currentLine.endsWith("POST /set0")) {
           variable = 0;
           printConfig();
         }     
@@ -141,8 +141,14 @@ void printConfig()
 
   // the content of the HTTP response follows the header:
   // Added: nicer buttons
-  client.print("variable <button onclick=\"location.href='/LED1_H'\">1</button>");
-  client.println(" <button onclick=\"location.href='/LED1_L'\">0</button><br>");
+
+  client.println("<form id=\"form1\" method=\"post\" action=\"/set1\">");
+  client.println("<button onclick=\"document.getElementById('form1').submit(); return false;\">set 1</button>");
+  client.println("</form>");
+
+  client.println("<form id=\"form0\" method=\"post\" action=\"/set0\">");
+  client.println("<button onclick=\"document.getElementById('form0').submit(); return false;\">set 0</button>");
+  client.println("</form>");
 
   client.println("variable ");
   if(variable == 1)client.print("is 1<br>");
