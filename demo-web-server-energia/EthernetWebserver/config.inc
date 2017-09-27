@@ -1,0 +1,15 @@
+  client.println("<html>");
+  client.println("<head><title>Energia Ethernet Web Server</title></head>");
+  client.println("<body align=center>");
+  client.println("<h1 align=center>Welcome to the Ethernet Web Server</h1>");
+  client.println("<form id=\"form1\" method=\"post\" action=\"/set\">");
+  client.println("    <button onclick=\"document.getElementById('form1').submit(); return false;\">set</button>");
+  client.println("</form>");
+  client.println("<form id=\"form0\" method=\"post\" action=\"/clean\">");
+  client.println("    <button onclick=\"document.getElementById('form0').submit(); return false;\">clean</button>");
+  client.println("</form>");
+  client.println(String() + "variable is " + variable + "<br>");
+  client.println("<a href=\"/config.html\">refresh</a> <br>");
+  client.println("<a href=\"/index.html\">home</a> <br>");
+  client.println("</body>");
+  client.println("</html>");

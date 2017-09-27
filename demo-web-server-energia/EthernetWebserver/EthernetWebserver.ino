@@ -87,11 +87,11 @@ void loop() {
           printIndex();
         }
         // Check to see if the client request was "GET /H" or "GET /L":
-        if (currentLine.endsWith("POST /set1")) {
+        if (currentLine.endsWith("POST /set")) {
           variable = 1;
           printConfig();
         }         
-        if (currentLine.endsWith("POST /set0")) {
+        if (currentLine.endsWith("POST /clean")) {
           variable = 0;
           printConfig();
         }     
@@ -112,18 +112,8 @@ void printIndex()
 
   client.println("Content-type:text/html");
   client.println();
-  client.println("<html><head><title>Energia Ethernet Web Server</title></head><body align=center>");
-  client.println("<h1 align=center><font color=\"red\">Welcome To Ethernet Web Server</font></h1>");
-  client.println("</br><font size=\"4px\"><table border=\"0\" align=center width=1200px height=590px>");
-  client.println("<tr><td align=center width=375></td><td width=450px align=left valign=\"top\">");
 
-
-  client.println("<p>The Ethernet Web Server provides the");
-  client.println("capability to remotely read and write GPIOs ");
-  client.println("on/off.</p></br></br>");
-  client.println("<p><a href=\"/config.html\">Click here</a> ");
-  client.println("to check status and configure the board</p>");
-  client.println("<td align=cneter width=375></td></tr></table></font></body></html>");
+#include "index.inc"
 
   client.println();
 
@@ -136,27 +126,9 @@ void printConfig()
   client.println("HTTP/1.1 200 OK");
   client.println("Content-type:text/html");
   client.println();
-  client.println("<html><head><title>Energia Ethernet Web Server</title></head><body align=center>");
-  client.println("<h1 align=center><font color=\"red\">Welcome to the Ethernet Web Server</font></h1>");
 
-  // the content of the HTTP response follows the header:
-  // Added: nicer buttons
+#include "config.inc"
 
-  client.println("<form id=\"form1\" method=\"post\" action=\"/set1\">");
-  client.println("<button onclick=\"document.getElementById('form1').submit(); return false;\">set 1</button>");
-  client.println("</form>");
-
-  client.println("<form id=\"form0\" method=\"post\" action=\"/set0\">");
-  client.println("<button onclick=\"document.getElementById('form0').submit(); return false;\">set 0</button>");
-  client.println("</form>");
-
-  client.println("variable ");
-  if(variable == 1)client.print("is 1<br>");
-  else client.print("is 0<br>");
-
-  client.println("<a href=\"/config.html\" >refresh</a> <br>");
-  client.println("<a href=\"/index.html\" >home</a> <br>");
-  client.println("</body></html>");
   // The HTTP response ends with another blank line:
   client.println();
   // break out of the while loop:

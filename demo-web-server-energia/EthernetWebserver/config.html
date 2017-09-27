@@ -1,12 +1,12 @@
 <html>
 <head><title>Energia Ethernet Web Server</title></head>
 <body align=center>
-<h1 align=center><font color="red">Welcome to the Ethernet Web Server</font></h1>
-<form id="form1" method="post" action="/set1">
-    <button onclick="document.getElementById('form1').submit(); return false;">set 1</button>
+<h1 align=center>Welcome to the Ethernet Web Server</h1>
+<form id="form1" method="post" action="/set">
+    <button onclick="document.getElementById('form1').submit(); return false;">set</button>
 </form>
-<form id="form0" method="post" action="/set0">
-    <button onclick="document.getElementById('form0').submit(); return false;">set 0</button>
+<form id="form0" method="post" action="/clean">
+    <button onclick="document.getElementById('form0').submit(); return false;">clean</button>
 </form>
 variable is {variable}<br>
 <a href="/config.html">refresh</a> <br>
