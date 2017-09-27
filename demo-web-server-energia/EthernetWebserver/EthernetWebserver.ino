@@ -24,24 +24,20 @@ void printHelp();
 
 EthernetServer server(80);
 int statusConfig = 0;
+int variable = 0;
 
 
 void setup() {
   Serial.begin(115200);    
 
-  pinMode(D1_LED, OUTPUT);
-  pinMode(D2_LED, OUTPUT);
-  pinMode(PUSH1, INPUT_PULLUP); // released = HIGH, pressed = LOW
-  pinMode(PUSH2, INPUT_PULLUP);
-
   Serial.println("Connecting to Ethernet....");  
-  IPAddress ip = IPAddress(146,252,242,129);
-  IPAddress dns = IPAddress(146,252,242,12);
-  IPAddress gw = IPAddress(146,252,242,254);
+  IPAddress ip = IPAddress(192,168,1,100);
+  IPAddress dns = IPAddress(192,168,1,100);
+  IPAddress gw = IPAddress(192,168,1,1);
   IPAddress mask = IPAddress(255,255,255,0);
 
-  Ethernet.begin(0);
-  //  Ethernet.begin(0, ip, dns, gw);
+  // Ethernet.begin(0);
+  Ethernet.begin(0, ip, dns, gw);
 
   server.begin();
 
@@ -61,16 +57,6 @@ void loop() {
     unsigned long connectionActiveTimer;  // will hold the connection start time
 
     while (client.connected()) {       // loop while the client's connected
-      if (newConnection){                 // it's a new connection, so
-        connectionActiveTimer = millis(); // log when the connection started
-        newConnection = false;          // not a new connection anymore
-      }
-      if (!newConnection && connectionActiveTimer + 1000 < millis()){ 
-        // if this while loop is still active 1000ms after a web client connected, something is wrong
-        break;  // leave the while loop, something bad happened
-      }
-
-
       if (client.available()) {             // if there's bytes to read from the client,    
         char c = client.read();             // read a byte, then
         // This lockup is because the recv function is blocking.
@@ -102,21 +88,13 @@ void loop() {
         }
         // Check to see if the client request was "GET /H" or "GET /L":
         if (currentLine.endsWith("GET /LED1_H")) {
-          digitalWrite(D1_LED, HIGH);
+          variable = 1;
           printConfig();
         }         
         if (currentLine.endsWith("GET /LED1_L")) {
-          digitalWrite(D1_LED, LOW);
+          variable = 0;
           printConfig();
         }     
-        if (currentLine.endsWith("GET /LED2_H")) {
-          digitalWrite(D2_LED, HIGH);
-          printConfig();
-        }       
-        if (currentLine.endsWith("GET /LED2_L")) {
-          digitalWrite(D2_LED, LOW);
-          printConfig();
-        }
       }
     }
     // close the connection:
@@ -163,17 +141,12 @@ void printConfig()
 
   // the content of the HTTP response follows the header:
   // Added: nicer buttons
-  client.print("LED 1<button onclick=\"location.href='/LED1_H'\">HIGH</button>");
-  client.println(" <button onclick=\"location.href='/LED1_L'\">LOW</button><br>");
-  client.print("LED 2 <button onclick=\"location.href='/LED2_H'\">HIGH</button>");
-  client.println(" <button onclick=\"location.href='/LED2_L'\">LOW</button><br><br>");
+  client.print("variable <button onclick=\"location.href='/LED1_H'\">1</button>");
+  client.println(" <button onclick=\"location.href='/LED1_L'\">0</button><br>");
 
-  client.println("PUSH1 ");
-  if(digitalRead(PUSH1))client.print("is HIGH<br>");
-  else client.print("is LOW<br>");
-  client.println("PUSH2 ");
-  if(digitalRead(PUSH2))client.print("is HIGH<br>");
-  else client.print("is LOW<br>");  
+  client.println("variable ");
+  if(variable == 1)client.print("is 1<br>");
+  else client.print("is 0<br>");
 
   client.println("<a href=\"/config.html\" >refresh</a> <br>");
   client.println("<a href=\"/index.html\" >home</a> <br>");
