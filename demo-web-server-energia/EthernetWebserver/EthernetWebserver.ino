@@ -37,7 +37,7 @@ void setup() {
   IPAddress mask = IPAddress(255,255,255,0);
 
   // Ethernet.begin(0);
-  Ethernet.begin(0, ip, dns, gw);
+  Ethernet.begin(0, ip, dns, gw, mask);
 
   server.begin();
 
@@ -100,7 +100,7 @@ void loop() {
   }
 }
 
-void printIndex(EthernetClient client)
+void printIndex(EthernetClient& client)
 {
   // HTTP headers always start with a response code (e.g. HTTP/1.1 200 OK)
   // and a content-type so the client knows what's coming, then a blank line:    
@@ -116,7 +116,7 @@ void printIndex(EthernetClient client)
 
 }
 
-void printConfig(EthernetClient client)
+void printConfig(EthernetClient& client)
 {
   // HTTP headers always start with a response code (e.g. HTTP/1.1 200 OK)
   // and a content-type so the client knows what's coming, then a blank line:    
@@ -131,7 +131,7 @@ void printConfig(EthernetClient client)
   // break out of the while loop:
 }
 
-void printRedirect(EthernetClient client)
+void printRedirect(EthernetClient& client)
 {
   // HTTP headers always start with a response code (e.g. HTTP/1.1 200 OK)
   // and a content-type so the client knows what's coming, then a blank line:
@@ -203,7 +203,41 @@ void printEthernetData() {
 
 }
 
+/*
+String inputString = ""; // a string to hold incoming data
+boolean stringComplete = false; // whether the string is complete
 
+void setup() {
+  // initialize serial:
+  Serial.begin(9600);
+  // reserve 200 bytes for the inputString:
+  inputString.reserve(200);
+}
+
+void loop() {
+  // print the string when a newline arrives:
+  if (stringComplete) {
+    Serial.println(inputString);
+    // clear the string:
+    inputString = "";
+    stringComplete = false;
+  }
+}
+
+void serialEvent() {
+  while (Serial.available()) {
+    // get the new byte:
+    char inChar = (char)Serial.read();
+    // add it to the inputString:
+    inputString += inChar;
+    // if the incoming character is a newline, set a flag
+    // so the main loop can do something about it:
+    if (inChar == '\n') {
+    stringComplete = true;
+    }
+  }
+}
+*/
 
 
 
