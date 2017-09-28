@@ -44,17 +44,14 @@ void setup() {
   printEthernetData();
 }
 
-EthernetClient client;
-
 void loop() {
-  client = server.available();
+  EthernetClient client = server.available();
 
   if (client) {                             // if you get a client,
     Serial.print("new client on port ");           // print a message out the serial port
     Serial.println(client.port());
+
     String currentLine = "";                // make a String to hold incoming data from the client
-    boolean newConnection = true;     // flag for new connections
-    unsigned long connectionActiveTimer;  // will hold the connection start time
 
     while (client.connected()) {       // loop while the client's connected
       if (client.available()) {             // if there's bytes to read from the client,    
@@ -76,24 +73,24 @@ void loop() {
         }
         if (currentLine.endsWith("GET / ")) {
           statusConfig = 0;
-          printIndex();
+          printIndex(client);
         }
         if (currentLine.endsWith("GET /config.html ")) {
           statusConfig = 1;
-          printConfig();
+          printConfig(client);
         }
         if (currentLine.endsWith("GET /index.html ")) {
           statusConfig = 0;
-          printIndex();
+          printIndex(client);
         }
-        // Check to see if the client request was "GET /H" or "GET /L":
+
         if (currentLine.endsWith("POST /set")) {
           variable = 1;
-          printConfig();
+          printRedirect(client);
         }         
         if (currentLine.endsWith("POST /clean")) {
           variable = 0;
-          printConfig();
+          printRedirect(client);
         }     
       }
     }
@@ -103,7 +100,7 @@ void loop() {
   }
 }
 
-void printIndex()
+void printIndex(EthernetClient client)
 {
   // HTTP headers always start with a response code (e.g. HTTP/1.1 200 OK)
   // and a content-type so the client knows what's coming, then a blank line:    
@@ -119,7 +116,7 @@ void printIndex()
 
 }
 
-void printConfig()
+void printConfig(EthernetClient client)
 {
   // HTTP headers always start with a response code (e.g. HTTP/1.1 200 OK)
   // and a content-type so the client knows what's coming, then a blank line:    
@@ -132,6 +129,15 @@ void printConfig()
   // The HTTP response ends with another blank line:
   client.println();
   // break out of the while loop:
+}
+
+void printRedirect(EthernetClient client)
+{
+  // HTTP headers always start with a response code (e.g. HTTP/1.1 200 OK)
+  // and a content-type so the client knows what's coming, then a blank line:
+  client.println("HTTP/1.1 302 Found");
+  client.println("Location: /config.html");
+  client.println();
 }
 
 void serialEvent() {
